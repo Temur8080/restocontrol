@@ -1,0 +1,614 @@
+/**
+ * MOBIL VERSION - KUCHLI DEBUG VA FIX
+ * Scroll va Button'lar 100% ishlaydi
+ * Overlay muammosini hal qilish
+ */
+
+@media (max-width: 750px) {
+    /* =========================
+       VIEWPORT VA BODY - SCROLL ISHLASHI UCHUN
+    ========================= */
+    html {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-text-size-adjust: 100% !important;
+        position: relative !important;
+        /* Scroll ishlashi uchun */
+        -webkit-overflow-scrolling: touch !important;
+        scroll-behavior: smooth !important;
+    }
+    
+    body {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        position: relative !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        overscroll-behavior: contain !important;
+        /* Scroll ishlashi uchun */
+        -webkit-overflow-scrolling: touch !important;
+        scroll-behavior: smooth !important;
+        /* Admin-styles.css'dagi overflow: hidden ni override qilish */
+        overflow: visible !important;
+    }
+
+    /* =========================
+       ADMIN CONTAINER - SCROLL ISHLASHI UCHUN
+    ========================= */
+    .admin-container {
+        position: relative !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-x: hidden !important;
+        overflow-y: visible !important;
+        width: 100% !important;
+        /* Admin-styles.css'dagi overflow: hidden ni override qilish */
+        overflow: visible !important;
+        display: block !important;
+    }
+
+    .admin-container > main {
+        position: relative !important;
+        overflow-x: hidden !important;
+        overflow-y: visible !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        /* Admin-styles.css'dagi overflow: hidden ni override qilish */
+        overflow: visible !important;
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    /* Admin content wrapper - asosiy scroll container */
+    .admin-content-wrapper {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-x: hidden !important;
+        overflow-y: visible !important;
+        position: relative !important;
+        display: block !important;
+    }
+
+    /* =========================
+       SIDEBAR OVERLAY - ENG MUHIM FIX
+    ========================= */
+    .sidebar-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        z-index: 9998 !important;
+        display: none !important; /* Dastlab yashirin */
+        pointer-events: none !important; /* Dastlab click'lar o'tadi */
+    }
+
+    .sidebar-overlay.show {
+        display: block !important;
+        pointer-events: auto !important;
+    }
+
+    /* Sidebar ochiq bo'lmaganda overlay yashirin */
+    .admin-sidebar:not(.mobile-open) ~ .sidebar-overlay,
+    body:not(:has(.admin-sidebar.mobile-open)) .sidebar-overlay {
+        display: none !important;
+        pointer-events: none !important;
+    }
+
+    /* =========================
+       SCROLL CONTAINER'LAR
+    ========================= */
+    .admin-content-wrapper {
+        overflow-y: visible !important; /* Body scroll ishlaydi */
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+        position: relative !important;
+        pointer-events: auto !important;
+        z-index: 1 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100vh !important;
+    }
+    
+    .sidebar-nav,
+    .sidebar-menu,
+    .modal-content {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+        position: relative !important;
+        pointer-events: auto !important;
+        z-index: 1 !important;
+    }
+    
+    .admins-list-card,
+    #salariesEmployeesList {
+        overflow-y: visible !important; /* Body scroll ishlaydi */
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+        position: relative !important;
+        pointer-events: auto !important;
+        z-index: 1 !important;
+    }
+
+    /* =========================
+       BUTTON / LINK - KUCHLI FIX
+    ========================= */
+    button,
+    .btn,
+    a[href],
+    [onclick],
+    [role="button"],
+    .icon-btn,
+    .action-btn,
+    .sidebar-menu-link,
+    .submenu-link,
+    .submenu-container,
+    .logout-btn,
+    .refresh-btn,
+    .add-icon-btn,
+    .edit-btn,
+    .delete-btn,
+    .details-btn,
+    .modal-close,
+    .btn-save,
+    .btn-cancel,
+    .btn-delete,
+    .add-btn,
+    .password-change-btn,
+    .password-toggle,
+    .mobile-menu-toggle,
+    .close-details-btn {
+        min-height: 44px !important;
+        min-width: 44px !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: transparent !important;
+        user-select: none !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        position: relative !important;
+        z-index: 10 !important;
+    }
+
+    button:active,
+    .btn:active,
+    a:active {
+        opacity: 0.85 !important;
+        transform: scale(0.98) !important;
+    }
+
+    button:disabled,
+    .btn:disabled {
+        opacity: 0.5 !important;
+        pointer-events: none !important;
+    }
+
+    /* =========================
+       SUBMENU / SIDEBAR
+    ========================= */
+    .submenu,
+    .submenu-container {
+        position: relative !important;
+        z-index: 10 !important;
+        pointer-events: auto !important;
+    }
+
+    /* =========================
+       ADMIN SIDEBAR - KICHIKROQ
+    ========================= */
+    .admin-sidebar {
+        width: 240px !important;
+        max-width: 90vw !important; /* Kichik ekranlar uchun kengroq */
+        min-width: 200px !important; /* Eng kichik o'lcham */
+    }
+    
+    /* Eng kichik ekranlar uchun (453px dan kichik) */
+    @media (max-width: 453px) {
+        .admin-sidebar {
+            
+            max-width: 90vw !important;
+            min-width: 200px !important;
+        }
+    }
+    
+    .sidebar-header {
+        padding: 10px 12px !important;
+        gap: 10px !important;
+    }
+    
+    #sidebarLogo {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        max-width: 40px !important;
+        max-height: 40px !important;
+    }
+    
+    #sidebarTitle {
+        font-size: 13px !important;
+        font-weight: 600 !important;
+    }
+    
+    .sidebar-nav {
+        padding: 8px 0 !important;
+    }
+    
+    .sidebar-menu {
+        gap: 2px !important;
+        padding: 0 !important;
+    }
+    
+    .sidebar-menu-link {
+        padding: 10px 14px !important;
+        font-size: 13px !important;
+        margin: 2px 8px !important;
+        gap: 10px !important;
+    }
+    
+    .sidebar-menu-icon {
+        width: 16px !important;
+        height: 16px !important;
+        min-width: 16px !important;
+        min-height: 16px !important;
+    }
+    
+    .sidebar-menu-icon svg {
+        width: 14px !important;
+        height: 14px !important;
+    }
+    
+    .sidebar-footer {
+        padding: 8px 10px !important;
+    }
+    
+    .logout-btn {
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+        gap: 8px !important;
+        min-height: 40px !important;
+    }
+    
+    .logout-btn svg {
+        width: 14px !important;
+        height: 14px !important;
+    }
+
+    /* =========================
+       MODAL OVERLAY
+    ========================= */
+    .modal-overlay {
+        position: fixed !important;
+        inset: 0 !important;
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
+        z-index: 9998 !important;
+    }
+
+    .modal-overlay:not(.show) {
+        display: none !important;
+        pointer-events: none !important;
+    }
+
+    .modal-content {
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        pointer-events: auto !important;
+        z-index: 9999 !important;
+    }
+
+    /* =========================
+       TABLE SCROLL
+    ========================= */
+    .table-wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x pan-y !important;
+    }
+
+    table {
+        width: max-content !important;
+        min-width: 100% !important;
+        border-collapse: collapse !important;
+        display: block !important;
+        overflow-x: auto !important;
+    }
+
+    /* =========================
+       INPUT (iOS zoom fix)
+    ========================= */
+    input,
+    textarea,
+    select {
+        font-size: 16px !important;
+        touch-action: manipulation !important;
+    }
+
+    /* =========================
+       MOBILE MENU TOGGLE - KICHIKROQ
+    ========================= */
+    .mobile-menu-toggle {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        max-width: 32px !important;
+        max-height: 32px !important;
+        padding: 4px !important;
+        border-radius: 6px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: transparent !important;
+    }
+    
+    .mobile-menu-toggle svg {
+        width: 16px !important;
+        height: 16px !important;
+        max-width: 16px !important;
+        max-height: 16px !important;
+        min-width: 16px !important;
+        min-height: 16px !important;
+    }
+
+    /* =========================
+       ICON BUTTON'LAR - KICHIKROQ
+    ========================= */
+    .refresh-btn,
+    .add-icon-btn,
+    .edit-btn,
+    .delete-btn,
+    .details-btn,
+    .icon-btn,
+    button[class*="icon"],
+    button[class*="Icon"],
+    /* Terminal button'lar */
+    button[onclick*="testTerminalConnection"],
+    button[onclick*="fetchTerminalUsers"],
+    button[onclick*="syncTerminalEvents"] {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+        max-width: 36px !important;
+        max-height: 36px !important;
+        padding: 6px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 6px !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: transparent !important;
+    }
+    
+    .refresh-btn svg,
+    .add-icon-btn svg,
+    .edit-btn svg,
+    .delete-btn svg,
+    .details-btn svg,
+    .icon-btn svg,
+    button[class*="icon"] svg,
+    button[class*="Icon"] svg,
+    /* Terminal button icon'lar */
+    button[onclick*="testTerminalConnection"] svg,
+    button[onclick*="fetchTerminalUsers"] svg,
+    button[onclick*="syncTerminalEvents"] svg {
+        width: 16px !important;
+        height: 16px !important;
+        max-width: 16px !important;
+        max-height: 16px !important;
+        min-width: 16px !important;
+        min-height: 16px !important;
+    }
+    
+    /* Card header ichidagi icon button'lar */
+    .card-header .refresh-btn,
+    .card-header .add-icon-btn,
+    .card-header .edit-btn,
+    .card-header .delete-btn,
+    .card-header .details-btn,
+    .card-header .icon-btn,
+    .card-header button[class*="icon"] {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        max-width: 32px !important;
+        max-height: 32px !important;
+        padding: 4px !important;
+    }
+    
+    .card-header .refresh-btn svg,
+    .card-header .add-icon-btn svg,
+    .card-header .edit-btn svg,
+    .card-header .delete-btn svg,
+    .card-header .details-btn svg,
+    .card-header .icon-btn svg,
+    .card-header button[class*="icon"] svg {
+        width: 14px !important;
+        height: 14px !important;
+        max-width: 14px !important;
+        max-height: 14px !important;
+        min-width: 14px !important;
+        min-height: 14px !important;
+    }
+
+    /* =========================
+       MAOSHLAR BO'LIMI - OVERLAP MUAMMOSI HAL QILISH
+    ========================= */
+    
+    /* Salary employees list - gap va spacing */
+    #salariesEmployeesList {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        margin-bottom: 20px !important;
+        position: relative !important;
+        z-index: 1 !important;
+    }
+    
+    /* Employee salary card - overlap yo'q */
+    #salariesEmployeesList > div {
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+        position: relative !important;
+        z-index: 1 !important;
+        padding: 10px 12px !important;
+        border-radius: 6px !important;
+    }
+    
+    /* Card ichidagi elementlar - to'liq ko'rinishda */
+    #salariesEmployeesList > div > div {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    
+    /* Period va total info - kichikroq va to'liq ko'rinishda */
+    #salariesEmployeesList > div > div > div[style*="display: flex; gap: 32px"] {
+        gap: 12px !important;
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        margin-top: 8px !important;
+    }
+    
+    #salariesEmployeesList > div > div > div[style*="display: flex; gap: 32px"] > div {
+        min-width: auto !important;
+        flex: 1 1 auto !important;
+    }
+    
+    /* Employee picture - kichikroq */
+    #salariesEmployeesList img,
+    #salariesEmployeesList > div > div > div[style*="width: 48px"] {
+        width: 40px !important;
+        height: 40px !important;
+        max-width: 40px !important;
+        max-height: 40px !important;
+    }
+    
+    /* Employee name va position - kichikroq font */
+    #salariesEmployeesList > div > div > div[style*="flex: 1"] > div:first-child {
+        font-size: 13px !important;
+        margin-bottom: 2px !important;
+        line-height: 1.3 !important;
+    }
+    
+    #salariesEmployeesList > div > div > div[style*="flex: 1"] > div:last-child {
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+    }
+    
+    /* Period va total info text - kichikroq */
+    #salariesEmployeesList > div > div > div[style*="display: flex; gap: 32px"] > div > div:first-child {
+        font-size: 10px !important;
+        margin-bottom: 2px !important;
+    }
+    
+    #salariesEmployeesList > div > div > div[style*="display: flex; gap: 32px"] > div > div:nth-child(2) {
+        font-size: 12px !important;
+        line-height: 1.3 !important;
+    }
+    
+    #salariesEmployeesList > div > div > div[style*="display: flex; gap: 32px"] > div > div:last-child {
+        font-size: 10px !important;
+        margin-top: 2px !important;
+    }
+    
+    /* Number badge - kichikroq */
+    #salariesEmployeesList > div > div > div[style*="width: 32px"][style*="height: 32px"] {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 12px !important;
+    }
+    
+    /* Salary stats container - kichikroq kartalar */
+    #salaryStatsContainer {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 16px !important;
+    }
+    
+    #salaryStatsContainer > div {
+        padding: 10px 12px !important;
+        border-radius: 6px !important;
+        margin-bottom: 0 !important;
+    }
+    
+    #salaryStatsContainer > div > div:first-child {
+        font-size: 18px !important;
+        margin-bottom: 2px !important;
+    }
+    
+    #salaryStatsContainer > div > div:last-child {
+        font-size: 11px !important;
+    }
+    
+    /* Salary employee filter - to'liq kenglik */
+    #salaryEmployeeFilter {
+        width: 100% !important;
+        margin-top: 12px !important;
+        font-size: 13px !important;
+    }
+    
+    /* Empty message */
+    #emptySalariesMessage {
+        padding: 40px 20px !important;
+        margin-top: 20px !important;
+    }
+
+    /* =========================
+       MIN-WIDTH ELEMENTLAR - KATTA
+    ========================= */
+    [style*="min-width: 120px"][style*="flex-shrink: 0"][style*="text-align: right"],
+    div[style*="min-width: 120px"] {
+        min-width: 140px !important;
+        flex-shrink: 0 !important;
+        text-align: right !important;
+    }
+    
+    /* Employee info item strong */
+    .employee-info-item strong {
+        min-width: 140px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* =========================
+       PREVENT OVERLAP - BARCHA ELEMENTLAR
+    ========================= */
+    * {
+        max-width: 100vw !important;
+    }
+
+    /* Barcha fixed position elementlar - faqat kerak bo'lganda */
+    [style*="position: fixed"]:not(.sidebar-overlay):not(.modal-overlay) {
+        z-index: 9999 !important;
+    }
+}
+
+/* =========================
+   iOS SAFARI FIX
+========================= */
+@supports (-webkit-touch-callout: none) {
+    @media (max-width: 750px) {
+        body {
+            min-height: -webkit-fill-available !important;
+            padding-bottom: env(safe-area-inset-bottom) !important;
+        }
+
+        .admin-content-wrapper {
+            min-height: -webkit-fill-available !important;
+        }
+    }
+}
