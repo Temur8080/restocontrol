@@ -33,13 +33,17 @@ if [ -d ".git" ]; then
     LOCAL_COMMIT=$(git rev-parse HEAD 2>/dev/null || echo "")
     REMOTE_COMMIT=$(git rev-parse origin/main 2>/dev/null || echo "")
     
-    if [ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ] && [ -n "$LOCAL_COMMIT" ] && [ -n "$REMOTE_COMMIT" ]; then
-        echo "⚠️  Server va GitHub'dagi kodlar farq qilmoqda"
+    # Unrelated histories yoki divergent branches holatini hal qilish
+    echo "✅ Git holati yangilanmoqda..."
+    if git pull origin main --no-rebase 2>&1 | grep -q "unrelated histories\|divergent branches"; then
+        echo "⚠️  Unrelated histories yoki divergent branches topildi"
         echo "🔄 GitHub'dagi versiyani asosiy qilib qabul qilmoqda..."
         git reset --hard origin/main
+    elif ! git pull origin main --no-rebase 2>/dev/null; then
+        echo "⚠️  Pull muvaffaqiyatsiz, GitHub'dagi versiyani force qilib olinmoqda..."
+        git reset --hard origin/main
     else
-        echo "✅ Git holati yangilanmoqda..."
-        git pull origin main --no-rebase || git reset --hard origin/main
+        echo "✅ Git muvaffaqiyatli yangilandi"
     fi
 else
     echo "📥 Git repo topilmadi, yangidan yuklanmoqda..."
