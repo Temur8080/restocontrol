@@ -255,6 +255,101 @@ router.get('/users', requireAuth, requireRole('super_admin'), async (req, res) =
   }
 });
 
+// Update user subscription (super_admin only)
+router.post('/users/:id/subscription', requireAuth, requireRole('super_admin'), async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id);
+    const { due_date, price } = req.body;
+
+    // Validation
+    if (!due_date) {
+      return res.status(400).json({
+        success: false,
+        message: 'Due date kiritilishi shart'
+      });
+    }
+
+    if (price !== undefined && (isNaN(price) || price < 0)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Price to\'g\'ri raqam bo\'lishi kerak'
+      });
+    }
+
+    // Check if user exists
+    const userCheck = await pool.query(
+      'SELECT id FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (userCheck.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Foydalanuvchi topilmadi'
+      });
+    }
+
+    // Update subscription
+    const result = await pool.query(
+      `UPDATE users 
+       SET subscription_due_date = $1, 
+           subscription_price = $2 
+       WHERE id = $3 
+       RETURNING id, username, subscription_due_date, subscription_price`,
+      [due_date, price || null, userId]
+    );
+
+    res.json({
+      success: true,
+      message: 'Subscription muvaffaqiyatli yangilandi',
+      user: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Update subscription error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Subscription yangilashda xatolik',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// Get user subscription (super_admin only)
+router.get('/users/:id/subscription', requireAuth, requireRole('super_admin'), async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id);
+
+    const result = await pool.query(
+      `SELECT id, username, subscription_due_date, subscription_price 
+       FROM users 
+       WHERE id = $1`,
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Foydalanuvchi topilmadi'
+      });
+    }
+
+    res.json({
+      success: true,
+      subscription: {
+        due_date: result.rows[0].subscription_due_date,
+        price: result.rows[0].subscription_price
+      }
+    });
+  } catch (error) {
+    console.error('Get subscription error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Subscription ma\'lumotlarini olishda xatolik',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
 // ============================================
 // BONUSES ENDPOINTS
 // ============================================
