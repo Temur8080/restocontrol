@@ -27,7 +27,20 @@ echo "2. Git holatini tekshirish..."
 if [ -d ".git" ]; then
     echo "🔄 Mavjud Git repo topildi, yangilanmoqda..."
     git fetch origin
-    git pull origin main
+    
+    # Divergent branches holatini hal qilish
+    echo "📋 Serverdagi o'zgarishlarni tekshirish..."
+    LOCAL_COMMIT=$(git rev-parse HEAD 2>/dev/null || echo "")
+    REMOTE_COMMIT=$(git rev-parse origin/main 2>/dev/null || echo "")
+    
+    if [ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ] && [ -n "$LOCAL_COMMIT" ] && [ -n "$REMOTE_COMMIT" ]; then
+        echo "⚠️  Server va GitHub'dagi kodlar farq qilmoqda"
+        echo "🔄 GitHub'dagi versiyani asosiy qilib qabul qilmoqda..."
+        git reset --hard origin/main
+    else
+        echo "✅ Git holati yangilanmoqda..."
+        git pull origin main --no-rebase || git reset --hard origin/main
+    fi
 else
     echo "📥 Git repo topilmadi, yangidan yuklanmoqda..."
     git clone "$REPO_URL" .
