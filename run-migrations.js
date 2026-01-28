@@ -17,10 +17,18 @@ async function runMigration(filePath) {
     console.log(`\n📄 Running migration: ${path.basename(filePath)}`);
     await pool.query(sql);
     console.log(`✅ Migration completed: ${path.basename(filePath)}`);
-    return true;
+    return { success: true, skipped: false };
   } catch (error) {
+    // Agar migration allaqachon bajarilgan bo'lsa (IF NOT EXISTS, IF EXISTS kabi), bu xato emas
+    const errorMessage = error.message.toLowerCase();
+    if (errorMessage.includes('already exists') || 
+        errorMessage.includes('duplicate') ||
+        errorMessage.includes('does not exist')) {
+      console.log(`   ⏭️  Migration skipped (already applied): ${path.basename(filePath)}`);
+      return { success: true, skipped: true };
+    }
     console.error(`❌ Error running migration ${path.basename(filePath)}:`, error.message);
-    return false;
+    return { success: false, skipped: false };
   }
 }
 
@@ -28,32 +36,46 @@ async function runAllMigrations() {
   console.log('🚀 Starting database migrations...\n');
   
   const migrationsDir = path.join(__dirname, 'migrations');
+  
+  // Barcha migration fayllarini to'g'ri tartibda
   const migrationFiles = [
     'create-penalties-bonuses-kpi.sql',
+    'create-attendance-logs.sql',
+    'create-work-schedules.sql',
     'add-organization-fields.sql',
-    'add-admin-permissions.sql'
+    'add-admin-id-to-all-tables.sql',
+    'add-admin-permissions.sql',
+    'add-penalty-settings.sql',
+    'add-subscription-fields.sql',
+    'migrate-day-of-week-to-1-7.sql'
   ];
   
   let successCount = 0;
   let failCount = 0;
+  let skippedCount = 0;
   
   for (const file of migrationFiles) {
     const filePath = path.join(migrationsDir, file);
     if (fs.existsSync(filePath)) {
-      const success = await runMigration(filePath);
-      if (success) {
-        successCount++;
+      const result = await runMigration(filePath);
+      if (result.success) {
+        if (result.skipped) {
+          skippedCount++;
+        } else {
+          successCount++;
+        }
       } else {
         failCount++;
       }
     } else {
       console.log(`⚠️  Migration file not found: ${file}`);
-      failCount++;
+      skippedCount++;
     }
   }
   
   console.log(`\n📊 Migration Summary:`);
   console.log(`   ✅ Successful: ${successCount}`);
+  console.log(`   ⏭️  Skipped: ${skippedCount}`);
   console.log(`   ❌ Failed: ${failCount}`);
   
   await pool.end();
